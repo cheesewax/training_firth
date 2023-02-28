@@ -1,4 +1,4 @@
-# training_firth
+# training_bayard
 Coursework for ADC Reproducible Course
 
 ## git workflow
