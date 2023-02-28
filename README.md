@@ -1,4 +1,4 @@
-# Training Firth
+# Training Firth -> Merge Conflict Instigator <-
 
 Coursework for ADC Reproducible Course
 
