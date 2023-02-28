@@ -1,4 +1,4 @@
-# training_firth
+# Training Firth
 Coursework for ADC Reproducible Course
 
 ## git workflow
