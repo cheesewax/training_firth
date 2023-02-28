@@ -1,0 +1,37 @@
+---
+title: "Intro to RMarkdown"
+author: "cheesewax"
+date: "2023-02-27"
+output: html_document
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introfuction (purposeful typo)
+
+*Render render render render some text here*
+
+```{r, eval=FALSE}
+> this is the only way I could think of to make 'greentext' stuff
+> alas
+```
+
+You can also insert citations (and create a bibliography) from visual [@willette2013]
+
+Or tables
+
+| Col1   | Col2   | Col3 |
+|--------|--------|------|
+| Item 1 |        |      |
+| Item 2 |        |      |
+|        | Item 3 |      |
+
+```{r}
+x <- 4*3
+# This is a comment inside code
+# Use RMarkdown to insert text inside of code inside of text inside of code insi-
+```
+
