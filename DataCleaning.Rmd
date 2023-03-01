@@ -1,0 +1,124 @@
+---
+title: "Data Cleaning and Manipulation"
+author: "cheesewax"
+date: "2023-03-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Libraries
+
+```{r}
+library (dplyr)
+library (tidyr)
+library (readr)
+```
+
+## Load Data
+
+```{r}
+catch_original <- read.csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1")
+```
+
+## Clean Data
+```{r}
+# Remove All and notesRecCode columns (pretending ALL is actually a real marginal sum for this case to simplify)
+catch_data <- catch_original %>%
+  select(-All, -notesRegCode)
+
+#head(catch_data)
+glimpse(catch_data)
+```
+
+```{r}
+# Fix the chr class of Chinook
+catch_clean <-catch_data %>% 
+  mutate(Chinook = as.numeric(Chinook))
+
+# Hunt down the NA value(s) coerced by as.numeric
+i <- which(is.na(catch_clean$Chinook))
+i
+
+catch_data[i,]
+
+# Fix the problem data
+catch_clean <- catch_data %>% 
+  mutate(Chinook = if_else(Chinook == "I", "1", Chinook)) %>% 
+  mutate(Chinook = as.integer(Chinook))
+
+glimpse(catch_clean)
+```
+
+## Change shape via pivot_longer and pivot_wider
+```{r}
+# pivot longer practice
+catch_long <- catch_clean %>% 
+  pivot_longer(cols = -c(Region, Year), names_to = "species", values_to = "catch")
+
+View(catch_long)
+
+# pivot wider practice
+catch_wide <- catch_long %>% 
+  pivot_wider(names_from = species, values_from = catch)
+
+View(catch_wide)
+```
+
+## Practice renaming columns
+```{r}
+catch_long <- catch_long %>% 
+  rename(catch_thousands = catch)
+
+head(catch_long)
+```
+
+## Add columns with mutate function
+```{r}
+catch_long <- catch_long %>% 
+  mutate(catch = catch_thousands * 1000)
+
+head(catch_long)
+
+# Remove catch thousands
+catch_long <- catch_long %>% 
+  mutate(catch = catch_thousands * 1000) %>% 
+  select(-catch_thousands)
+
+head(catch_long)
+```
+
+## Practice using group_by and summarise
+```{r}
+mean_region <- catch_long %>% 
+  group_by(Region) %>% 
+  summarise(catch_mean = mean(catch))
+
+head(mean_region)
+
+# summarise count by region
+n_region <- catch_long %>% 
+  group_by(Region) %>% 
+  summarise(count = n()) # number of observations for each region
+
+head(n_region)
+```
+
+## Lesson on filtering
+```{r}
+ALU_catch <- catch_long %>% 
+  filter(Region == "ALU")
+
+head(ALU_catch)
+```
+
+## Joins practice
+```{r}
+region_defs <- read.csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.303.1") %>% 
+    select(code, mgmtArea)
+
+head(region_defs)
+```
+
