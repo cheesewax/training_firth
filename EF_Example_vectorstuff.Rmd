@@ -1,0 +1,35 @@
+---
+title: "And-ors in Vectors"
+author: "cheesewax"
+date: "2023-03-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+```{r}
+library(dplyr)
+library(tidyr)
+```
+
+## Set up my filtering up top so I can quickly change the subsets with minimal typing
+```{r}
+speciesopt <- c("virginica | versicolor") #Here I want to be able to choose one or more species, possibly using and/or
+petalwopt <- c("<=0.2") #Here I want to be able to select a subset of petal.widths based on value. Probably don't want to use chr's here, but I'm just shorthanding it for now.
+```
+
+## Filter some Stuff
+```{r}
+iris_sum <- iris %>% 
+  where(Species %in% grepl(speciesopt) & Petal.Width %in% grepl(petalwopt))
+# not sure 'where' is right, or if I have the right orders with %in% and grepl, but hopefully this gives the idea
+```
+
+## Plot
+```{r}
+ggplot(iris_sum) #etc etc etc the rest of my ggplot stuff.
+```
+
